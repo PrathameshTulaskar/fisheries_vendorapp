@@ -1,0 +1,57 @@
+import 'package:flutter/material.dart';
+
+class NewVendor extends StatelessWidget {
+  const NewVendor({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final _formKey=GlobalKey<FormState>();
+        return SafeArea(
+              child: Scaffold(
+                appBar:AppBar(),
+                body: Center(
+                  child: Container(
+                    width:MediaQuery.of(context).size.width*0.90,
+                    child: Form(
+                      key:_formKey,
+                      child:Column(children:[
+                        SizedBox(height:50),
+                        Container(
+                          height:50,
+                          child:TextFormField(
+                            //controller:
+                            decoration:InputDecoration(labelText:'Business Name'),
+                            validator:(text){
+                              if(text==null || text.isEmpty){
+                                return 'text is Empty';
+                              }
+                              return null;
+                            }
+                          ),
+                        ),Container(
+                          height:50,
+                          child:TextFormField(
+                            //controller:
+                            decoration:InputDecoration(labelText:'Business PinCode'),
+                            validator:(text){
+                              if(text==null || text.isEmpty){
+                                return 'text is Empty';
+                              }
+                              return null;
+                            }
+                          ),
+                        ),
+
+                        FlatButton(
+                          child:Text("Submit"),
+                          onPressed:null,
+                        )
+
+                      ])
+              ),
+                  ),
+            ),
+      ),
+    );
+  }
+}
