@@ -1,4 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fisheries_vendorapp/screen/Fishery-Admin/orderHistory.dart';
+import 'package:fisheries_vendorapp/screen/locationAdd.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fisheries_vendorapp/models/closingTime.dart';
@@ -24,6 +26,7 @@ import 'screen/Signup/signup_screen.dart';
 import 'screen/Welcome/welcome_screen.dart';
 import 'screen/addregistration.dart';
 import 'screen/home.dart';
+import 'screen/locationPickerLatest.dart';
 import 'services/auth/phone_auth/get_phone.dart';
 import 'screen/selectBusiness.dart';
 import 'screen/Fishery-Admin/selectfish.dart';
@@ -158,11 +161,15 @@ class GroceryVendor extends StatelessWidget {
             '/customerReviews': (BuildContext context) =>
                 CustomerReviewsDetails(),
             '/todaysSale': (BuildContext context) => TodaysSaleReport(),
+            '/orderHistory': (BuildContext context) => OrderHistory(),
+            '/locationMap': (context) => LocationMap(),
           },
           //initialRoute: '/welcomePage',
           //home: SelectBusiness()
           //home: VendorBusinessCard()
           home: LoginCheck()),
+      // home: AddFishBusiness()),
+      // home: LocationAdd()),
     );
   }
 }

@@ -31,8 +31,9 @@ class _VendorBusinessCardState extends State<VendorBusinessCard> {
     final appState = Provider.of<AppState>(context);
     return Scaffold(
       appBar: AppBar(
-          leading:IconButton(icon:Icon(Icons.arrow_back),onPressed:()=>Navigator.pushNamed(context, '/home')),
-            
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () => Navigator.pushNamed(context, '/home')),
         title: Text("Manage Business"),
       ),
       body: SingleChildScrollView(
@@ -115,23 +116,29 @@ class _VendorBusinessCardState extends State<VendorBusinessCard> {
                                       child: Center(
                                           child: Text("Start Business"))),
                                   onTap: () {
-                                    Navigator.pushNamed(
-                                        context, '/fishery');
+                                    Navigator.pushNamed(context, '/fishery');
                                   }),
                           InkWell(
-                            child: Container(
-                                height: 50,
-                                width: MediaQuery.of(context).size.width * 0.30,
-                                decoration: BoxDecoration(
-                                  color: Colors.blue[200],
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: Center(child: Text("Orders History")),
-                                )),
-                          ),
+                              child: Container(
+                                  height: 50,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.30,
+                                  decoration: BoxDecoration(
+                                    color: Colors.blue[200],
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child:
+                                        Center(child: Text("Orders History")),
+                                  )),
+                              onTap: () {
+                                Navigator.pushNamed(
+                                  context, '/orderHistory',
+                                  // arguments:
+                                );
+                              }),
                         ]),
-                        SizedBox(
+                    SizedBox(
                       height: 2,
                     ),
                   ],

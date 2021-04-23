@@ -37,7 +37,10 @@ class _TodaysOrderState extends State<TodaysOrder> {
           appBar:
               // AppBar(),
               AppBar(
-                leading:IconButton(icon:Icon(Icons.arrow_back),onPressed:()=>Navigator.pushNamed(context, '/vendorBusinessCard')),
+            leading: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () =>
+                    Navigator.pushNamed(context, '/vendorBusinessCard')),
             bottom: TabBar(
               onTap: (index) {
                 print(index);
@@ -68,6 +71,7 @@ class _TodaysOrderState extends State<TodaysOrder> {
                         .where("orderStatus", whereIn: ["Order Placed"])
                         .orderBy("orderPlacedDate", descending: true)
                         .snapshots(),
+                    // print("")
                     builder: (BuildContext context, snapshot) {
                       var orderDetails = snapshot.data.docs
                           .map((e) => Order.fromJson(e.data()))
@@ -453,7 +457,6 @@ class OrderCard extends StatelessWidget {
                                       Text(order.orderItems[index].productName),
                                       Text(order.orderItems[index].productQty),
                                       // Text(order.orderItems[index].productQty),
-                                      
                                     ]),
                               );
                             })),
@@ -564,8 +567,9 @@ class _ProductStatusState extends State<ProductStatus> {
                         decoration:
                             BoxDecoration(color: Colors.red.withOpacity(0.8)),
                         child: TextButton(
-                          
-                          child: Text("Update", style: TextStyle(fontSize: 12,color:Colors.black)),
+                          child: Text("Update",
+                              style:
+                                  TextStyle(fontSize: 12, color: Colors.black)),
                           onPressed: () {
                             showDialog(
                               context: context,

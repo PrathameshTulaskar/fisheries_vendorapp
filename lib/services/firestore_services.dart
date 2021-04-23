@@ -24,6 +24,7 @@ class FirestoreService {
         .collection("grocery/supermarkets/fisheriesList")
         .doc(businessId)
         .update({"available": true, "productAvailable": true});
+    // print("startBusinessstartBusiness ${businessId}");
   }
 
   Future<List<Order>> fetchTodaysSale() async {
@@ -36,9 +37,11 @@ class FirestoreService {
 
       var response = await _db
           .collection("grocery/orders/orderList")
-          .where("orderPlacedDate", isGreaterThan: todaysStartdate)
-          .where("orderPlacedDate", isLessThanOrEqualTo: todaysEnddate)
+          .where("businessId", isEqualTo: "uaq8KkrvaplwOyQrN4dY")
+          // .where("orderPlacedDate", isGreaterThan: todaysStartdate)
+          // .where("orderPlacedDate", isLessThanOrEqualTo: todaysEnddate)
           .get();
+      print("response of todays sale: ${[response]}");
       return response.docs.map((e) => Order.fromJson(e.data())).toList();
     } catch (e) {
       print("Error fetching todays sales report: $e");
@@ -110,7 +113,7 @@ class FirestoreService {
       String landMark,
       GeoPoint supermarketLoc) async {
     // var supermarketLocationPoint =
-        // GeoFirePoint(supermarketLoc.latitude, supermarketLoc.longitude);
+    // GeoFirePoint(supermarketLoc.latitude, supermarketLoc.longitude);
     return _db.collection("grocery/supermarkets/supermarketList").add({
       'vendor': vendorId,
       'supermarketName': supermarketName,
@@ -166,6 +169,26 @@ class FirestoreService {
     } catch (error) {
       print("error : $error");
       return false;
+    }
+  }
+
+  Future<List<Order>> fetchDealerOrders() async {
+    // var response =
+    //     _db.collection("grocery/orders/orderList").doc(dealerId).get();
+    try {
+      var response = await _db
+          .collection("grocery/orders/orderList")
+          .where("superMarketId", isEqualTo: "MFqR9qj55VAMckuX7a4i")
+          .get();
+      if (response != null) {
+        print(response);
+        // return response;
+      } else {
+        // return false;
+      }
+    } catch (error) {
+      print("error : $error");
+      // return false;
     }
   }
 
@@ -373,6 +396,15 @@ class FirestoreService {
     }
   }
 
+  Future<void> salesReport(String vendorId) async {
+    var response = _db
+        .collection("grocery/orders/orderList")
+        .where("businessId", isEqualTo: "uaq8KkrvaplwOyQrN4dY")
+        // .where("orderPlacedDate", isEqualTo: DateTime.now())
+        .snapshots();
+    print("$response");
+  }
+
   //Assigned Delivery Boy
   Stream<DocumentSnapshot> fetchDeliveryBoy(String supermarketId) {
     var response = _db
@@ -467,55 +499,85 @@ class FirestoreService {
   }
 
   //fetch order history
-  Future<QuerySnapshot> fetchOrders(String supermarketId,
-      DocumentSnapshot lastDocument, bool fetchMore) async {
+  Future<QuerySnapshot> fetchOrders(
+    String supermarketId,
+  ) async {
     //,DocumentSnapshot lastDocument
     var response;
     try {
       print("in service file to fetch orders:");
-      print("in service file to fetch orders DOCUMENT SNAPSHOP: $lastDocument");
-      print("in service file to fetch orders FETch More : $fetchMore");
-      if (fetchMore) {
-        // print("true");
-        response = await _db
-            .collection("grocery/orders/orderList")
-            .where("supermarketId", isEqualTo: supermarketId)
-            .where("orderStatus", whereIn: [
-              "Ready For Pickup",
-              "Order Packed",
-              "Order Delivered",
-              "Order Cancelled",
-              "Delivered",
-              "Cancelled",
-              "Customer not available"
-            ])
-            .orderBy("orderPlacedDate", descending: true)
-            .startAfterDocument(lastDocument)
-            .limit(5)
-            .get();
-      } else {
-        response = await _db
-            .collection("grocery/orders/orderList")
-            .where("supermarketId", isEqualTo: supermarketId)
-            .where("orderStatus", whereIn: [
-              "Ready For Pickup",
-              "Order Packed",
-              "Order Delivered",
-              "Order Cancelled",
-              "Delivered",
-              "Cancelled",
-              "Customer not available"
-            ])
-            .orderBy("orderPlacedDate", descending: true)
-            .limit(10)
-            .get();
-      }
+      // print("in service file to fetch orders DOCUMENT SNAPSHOP: $lastDocument");
+      // print("in service file to fetch orders FETch More : $fetchMore");
+
+      // print("true");
+      response = await _db
+          .collection("grocery/orders/orderList")
+          .where("supermarketId", isEqualTo: supermarketId)
+          .get();
+
       print("customer orders fetchedfrom firebase service: $response");
       return response;
     } catch (e) {
       print("error while fetching orders : $e");
       return null;
     }
+  }
+  // Future<QuerySnapshot> fetchOrders(String supermarketId,
+  //     DocumentSnapshot lastDocument, bool fetchMore) async {
+  //   //,DocumentSnapshot lastDocument
+  //   var response;
+  //   try {
+  //     print("in service file to fetch orders:");
+  //     print("in service file to fetch orders DOCUMENT SNAPSHOP: $lastDocument");
+  //     print("in service file to fetch orders FETch More : $fetchMore");
+  //     if (fetchMore) {
+  //       // print("true");
+  //       response = await _db
+  //           .collection("grocery/orders/orderList")
+  //           .where("supermarketId", isEqualTo: supermarketId)
+  //           .where("orderStatus", whereIn: [
+  //             "Ready For Pickup",
+  //             "Order Packed",
+  //             "Order Delivered",
+  //             "Order Cancelled",
+  //             "Delivered",
+  //             "Cancelled",
+  //             "Customer not available"
+  //           ])
+  //           .orderBy("orderPlacedDate", descending: true)
+  //           .startAfterDocument(lastDocument)
+  //           .limit(5)
+  //           .get();
+  //     } else {
+  //       response = await _db
+  //           .collection("grocery/orders/orderList")
+  //           .where("supermarketId", isEqualTo: supermarketId)
+  //           .where("orderStatus", whereIn: [
+  //             "Ready For Pickup",
+  //             "Order Packed",
+  //             "Order Delivered",
+  //             "Order Cancelled",
+  //             "Delivered",
+  //             "Cancelled",
+  //             "Customer not available"
+  //           ])
+  //           .orderBy("orderPlacedDate", descending: true)
+  //           .limit(10)
+  //           .get();
+  //     }
+  //     print("customer orders fetchedfrom firebase service: $response");
+  //     return response;
+  //   } catch (e) {
+  //     print("error while fetching orders : $e");
+  //     return null;
+  //   }
+  // }
+
+  Future<QuerySnapshot> todaysOrders(String superMarketId) async {
+    return await _db
+        .collection("grocery/orders/orderList")
+        .where("superMarketId", isEqualTo: superMarketId)
+        .get();
   }
 
   Future<FishBusiness> addFishBusiness(
@@ -527,8 +589,8 @@ class FirestoreService {
       String landMark,
       GeoPoint supermarketLoc) async {
     print("${supermarketLoc.latitude} // ${supermarketLoc.longitude}");
-    var supermarketLocationPoint ;
-        // GeoFirePoint(supermarketLoc.latitude, supermarketLoc.longitude);
+    var supermarketLocationPoint;
+    // GeoFirePoint(supermarketLoc.latitude, supermarketLoc.longitude);
     try {
       var response =
           await _db.collection("grocery/supermarkets/fisheriesList").add({
@@ -565,6 +627,25 @@ class FirestoreService {
       print("error while adding products :$e");
       return null;
     }
+  }
+
+// Future<FishBusiness> fetchBusinessDetailsByVendorId(String vendorId) async {
+//     var response = await _db
+//         .collection("grocery/supermarkets/fisheriesList")
+//         .where("vendorId", isEqualTo: vendorId)
+//         .get();
+//     var oveer = response.docs.map((e) => e.data()).last;
+//     print("$oveer njnnbnbujhbujhbujhbujhb");
+//     return response.docs.map((e) => FishBusiness.fromSnapshot(e)).last;
+//   }
+  Future<FishBusiness> businessExist(String vendorId) async {
+    
+    var response = await _db
+        .collection("grocery/supermarkets/fisheriesList")
+        .where("vendorId", isEqualTo: vendorId)
+        .get();
+
+    return response.docs.map((e) => FishBusiness.fromSnapshot(e)).last;
   }
 
   Future<bool> updatevideoLink(String youtubeLink, String businessId) {
@@ -817,12 +898,31 @@ class FirestoreService {
   ///
   ///Identifier prod/profile
   ///
-  Future<String> getImageurl(String base64Encode, String fileName, String identifier) async {
-    // var response = await http.post("http://weblozee.com/quickyShopFisheries/addFish.php", body: {
-    //   'image': base64Encode,
-    //   'name': fileName,
-    //   'identifier': identifier
-    // });
+  Future<String> getImageurl(
+      String base64Encode, String fileName, String identifier) async {
+    // var response = await http.post(
+    //     Uri.http("weblozee.com", "/quickyShopFisheries/addFish.php"),
+    //     body: {
+    //       'image': base64Encode,
+    //       'name': fileName,
+    //       'identifier': identifier
+    //     });
+    // print("image: $base64Encode name: $fileName identifier:$identifier ");
+    // // print();
     // return response.body;
+    try {
+      var response = await http.post(
+          Uri.http("weblozee.com", "/quickyShopFisheries/addFish.php"),
+          body: {
+            'image': base64Encode,
+            'name': fileName,
+            'identifier': identifier
+          });
+      print("image: $base64Encode name: $fileName identifier:$identifier ");
+      return response.body;
+    } catch (e) {
+      print("error: $e");
+      return null;
+    }
   }
 }
